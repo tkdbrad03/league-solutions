@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Solutions powered by CompliTrst™ - Stop Managing on Paper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #006666;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-img {
+            height: 50px;
+            width: auto;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .logo-main {
+            font-size: 24px;
+            color: #333;
+        }
+        
+        .logo-sub {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #006666 0%, #008080 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #006666;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #006666;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+        
+        .problem h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #006666;
+        }
+        
+        .problem-intro {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #666;
+        }
+        
+        .pain-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .pain-point {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .pain-point h3 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .pain-point p {
+            color: #666;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .solution h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #006666;
+        }
+        
+        .solution-intro {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #666;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: #006666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: white;
+        }
+        
+        .feature h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #006666;
+        }
+        
+        .feature p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        /* Case Study Section */
+        .case-study {
+            padding: 80px 0;
+            background: #006666;
+            color: white;
+        }
+        
+        .case-study h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .testimonial {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+        
+        .testimonial-quote {
+            font-size: 24px;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .result {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 8px;
+        }
+        
+        .result-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .result-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .case-study-link {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .case-study-link a {
+            color: white;
+            text-decoration: underline;
+            font-size: 18px;
+        }
+        
+        /* Who It's For Section */
+        .who-its-for {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+        
+        .who-its-for h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #006666;
+        }
+        
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .audience-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .audience-box h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .audience-box.perfect h3 {
+            color: #006666;
+        }
+        
+        .audience-box.not-fit h3 {
+            color: #d32f2f;
+        }
+        
+        .audience-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .audience-box li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #666;
+        }
+        
+        .audience-box.perfect li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #006666;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .audience-box.not-fit li:before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        /* How It Works Section */
+        .how-it-works {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .how-it-works h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #006666;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #006666;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #006666;
+        }
+        
+        .step p {
+            color: #666;
+        }
+        
+        .step-duration {
+            font-size: 14px;
+            color: #999;
+            margin-top: 10px;
+        }
+        
+        /* CTA Section */
+        .final-cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #006666 0%, #008080 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+        
+        .final-cta p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        /* FAQ Section */
+        .faq {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+        
+        .faq h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #006666;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .faq-question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #006666;
+            margin-bottom: 15px;
+        }
+        
+        .faq-answer {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .footer-section a:hover {
+            color: #C5A572;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #999;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .audience-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h2 {
+                font-size: 28px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/tkdbrad03/complitrst-app/main/public/logo.png" alt="CompliTrst" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-main">League Solutions</span>
+                    <span class="logo-sub">powered by CompliTrst™</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Stop Managing Your Golf League on Paper</h1>
+            <p>Automated league management for organizers tired of spending 10+ hours a week on manual admin work</p>
+            <div class="cta-buttons">
+                <a href="https://drive.google.com/file/d/1kVR3Svj9PGhV-3xnimkLyNglCn62WepA/view?usp=sharing" target="_blank" class="btn btn-primary">See How FPG League Did It</a>
+                <a href="https://calendar.app.google/xWSmGf34BtezxwYV9" target="_blank" class="btn btn-secondary">Schedule a Free Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <h2>You Didn't Sign Up to Be a Data Entry Clerk</h2>
+            <p class="problem-intro">Every week, you're stuck doing work that could be automated</p>
+            
+            <div class="pain-points">
+                <div class="pain-point">
+                    <h3>Manual Data Entry</h3>
+                    <p>Hours spent on tee-time announcements, tracking player availability, updating scores and statistics across multiple platforms</p>
+                </div>
+                <div class="pain-point">
+                    <h3>Fragmented Communication</h3>
+                    <p>Juggling text messages, emails, and phone calls with no centralized system for consistency</p>
+                </div>
+                <div class="pain-point">
+                    <h3>Missed Deadlines</h3>
+                    <p>Inaccurate information sent out weekly, causing frustration for both organizers and players</p>
+                </div>
+                <div class="pain-point">
+                    <h3>Time Drain</h3>
+                    <p>Spending 10+ hours every week on administrative tasks instead of playing golf</p>
+                </div>
+                <div class="pain-point">
+                    <h3>Constant Do-Overs</h3>
+                    <p>Too much time wasted fixing errors, redoing work, and managing administrative chaos</p>
+                </div>
+                <div class="pain-point">
+                    <h3>Extreme Stress</h3>
+                    <p>League management creating 9 out of 10 stress levels, questioning the integrity of processes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution">
+        <div class="container">
+            <h2>Automate the Busy Work. Enjoy the Game.</h2>
+            <p class="solution-intro">Custom golf league management systems that handle the work for you</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <h3>Centralized Check-In System</h3>
+                    <p>The game-changing feature: venue selection, guest management, gaming selection, pairings preferences, tee box selection, and weather preferences—all in one place</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚙</div>
+                    <h3>Player Self-Service</h3>
+                    <p>Secure credentials and automated updates eliminate manual data entry and constant back-and-forth communication</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Dramatic Time Savings</h3>
+                    <p>Transform 10+ hours of weekly chaos into streamlined, automated processes that just work</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Accuracy & Consistency</h3>
+                    <p>Eliminate missed deadlines, inaccurate information, and the dreaded "do-overs" that waste everyone's time</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📈</div>
+                    <h3>Scalable Foundation</h3>
+                    <p>Built to grow with your league—whether you have 20 or 100 players, the system adapts</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">😌</div>
+                    <h3>Peace of Mind</h3>
+                    <p>Drop your stress from 9/10 to 1/10. Spend time playing golf, not managing spreadsheets</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Study Section -->
+    <section class="case-study" id="case-study">
+        <div class="container">
+            <h2>FPG League Made the Switch</h2>
+            
+            <div class="testimonial">
+                <div class="testimonial-quote">
+                    "The 'Check-in' feature made the biggest difference. This feature includes all the essential elements needed, including venue selection, adding guests, individualized gaming selection, pairings preferences, tee box selection, and a unique inclement weather preference. These essential elements are now centralized and easy to navigate that makes a huge difference in managing our weekly administrative processes. Certainly 'Life-Changing' for the better!"
+                </div>
+                <div class="testimonial-author">
+                    — Chief, FPG League Organizer
+                </div>
+            </div>
+            
+            <div class="results">
+                <div class="result">
+                    <div class="result-number">89%</div>
+                    <div class="result-label">Stress Reduction</div>
+                </div>
+                <div class="result">
+                    <div class="result-number">10+ hrs</div>
+                    <div class="result-label">Weekly time transformed</div>
+                </div>
+                <div class="result">
+                    <div class="result-number">27</div>
+                    <div class="result-label">Happy players</div>
+                </div>
+                <div class="result">
+                    <div class="result-number">1-2 wks</div>
+                    <div class="result-label">Implementation time</div>
+                </div>
+            </div>
+            
+            <div class="case-study-link">
+                <a href="https://drive.google.com/file/d/1kVR3Svj9PGhV-3xnimkLyNglCn62WepA/view?usp=sharing" target="_blank">Download the Case Study (PDF) →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who It's For Section -->
+    <section class="who-its-for">
+        <div class="container">
+            <h2>Is This Right for Your League?</h2>
+            
+            <div class="audience-grid">
+                <div class="audience-box perfect">
+                    <h3>Perfect if you:</h3>
+                    <ul>
+                        <li>Have 20+ active players</li>
+                        <li>Run weekly, bi-weekly, or seasonal leagues</li>
+                        <li>Currently use paper forms or basic spreadsheets</li>
+                        <li>Spend 5+ hours/week on administrative tasks</li>
+                        <li>Want to modernize and professionalize your league</li>
+                    </ul>
+                </div>
+                
+                <div class="audience-box not-fit">
+                    <h3>Not the right fit if:</h3>
+                    <ul>
+                        <li>You run casual pickup games</li>
+                        <li>Your league has fewer than 20 players</li>
+                        <li>You're happy with your current system</li>
+                        <li>You're not ready to move away from paper</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>Three Simple Steps</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Discovery Call</h3>
+                    <p>We discuss your current process, pain points, and what you need automated</p>
+                    <div class="step-duration">30 minutes</div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Custom Build</h3>
+                    <p>I build your system and get it ready for your league</p>
+                    <div class="step-duration">2-4 weeks</div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Launch & Support</h3>
+                    <p>Your players get access, you get your time back, and I'm here if you need anything</p>
+                    <div class="step-duration">Ongoing</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">How much does it cost?</div>
+                    <div class="faq-answer">Investment depends on your league size and features needed. Most leagues see ROI in time savings within the first month. Let's discuss your specific situation on a free consultation call.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Will my players actually use it?</div>
+                    <div class="faq-answer">FPG League's players adapted quickly. The system is intuitive, and most players prefer digital to paper forms once they try it. We make the transition smooth.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What if I need changes later?</div>
+                    <div class="faq-answer">The system is built to evolve. We can add features like handicap tracking, scoring, and tee times as your league grows. You're not locked into a static solution.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How long does implementation take?</div>
+                    <div class="faq-answer">Typically 2-4 weeks from kickoff to launch, depending on complexity. We work with your schedule and can time the launch for the start of your season.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Do you work with leagues outside my area?</div>
+                    <div class="faq-answer">Yes! The system is cloud-based and works for leagues anywhere. We've worked with organizers across multiple regions.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta" id="contact">
+        <div class="container">
+            <h2>Ready to Get Your Weekends Back?</h2>
+            <p>Stop spending 5-10 hours a week on paperwork</p>
+            <div class="cta-buttons">
+                <a href="https://calendar.app.google/xWSmGf34BtezxwYV9" target="_blank" class="btn btn-primary">Schedule Your Free Consultation</a>
+                <a href="https://drive.google.com/file/d/1kVR3Svj9PGhV-3xnimkLyNglCn62WepA/view?usp=sharing" target="_blank" class="btn btn-secondary">Download the Case Study</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Tasha McCray, Ph.D.</p>
+                    <a href="mailto:info@complitrst.com">info@complitrst.com</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>About</h3>
+                    <p><strong>League Solutions powered by CompliTrst™</strong></p>
+                    <p>I help golf league organizers automate administrative work so they can focus on the game. Specializing in leagues with 20+ players ready to move beyond paper and spreadsheets.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#case-study">Case Study</a>
+                    <a href="#contact">Schedule Consultation</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 League Solutions powered by CompliTrst™. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
