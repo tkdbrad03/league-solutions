@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>League Solutions Configurator | CompliTrst™</title>
+  <style>
+    :root{
+      --primary:#42968e;
+      --primary-dark:#368178;
+      --primary-light:#5ca89f;
+      --gold:#d4af37;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --bg:#f8f9fa;
+      --card:#ffffff;
+      --line:#e5e7eb;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 20px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(66, 150, 142, 0.3);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: #d4af37;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.95;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Progress indicator */
+    .progress-bar {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e9ecef;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+
+    .step.active .step-circle {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .step.completed .step-circle {
+      background: var(--gold);
+      color: white;
+    }
+
+    .step-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .step.active .step-label {
+      color: var(--primary);
+    }
+
+    /* Content sections */
+    .section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Module selection */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .module-card {
+      background: white;
+      border: 3px solid #e9ecef;
+      border-radius: 15px;
+      padding: 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .module-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(66, 150, 142, 0.15);
+    }
+
+    .module-card.selected {
+      border-color: var(--primary);
+      background: #f0f8f7;
+      box-shadow: 0 8px 25px rgba(66, 150, 142, 0.2);
+    }
+
+    .module-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .module-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .module-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .check-icon {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .module-card.selected .check-icon {
+      display: flex;
+    }
+
+    /* Category headers */
+    .category {
+      margin: 40px 0 20px;
+    }
+
+    .category h2 {
+      font-size: 24px;
+      color: var(--primary-dark);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Form styles */
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Summary sidebar */
+    .summary-box {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      position: sticky;
+      top: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .summary-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e9ecef;
+    }
+
+    .summary-item {
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .summary-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 30px 0;
+    }
+
+    .summary-count {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #e9ecef;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex: 1;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(66, 150, 142, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: #f8f9fa;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Review section */
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .review-card h3 {
+      font-size: 16px;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .review-card p {
+      font-size: 14px;
+      color: #495057;
+    }
+
+    /* Success message */
+    .success-message {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .success-icon {
+      font-size: 72px;
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .success-message h2 {
+      font-size: 32px;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+    }
+
+    .success-message p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 28px; }
+      .subtitle { font-size: 16px; }
+      .modules-grid { grid-template-columns: 1fr; }
+      .btn-group { flex-direction: column; }
+    }
+
+    /* Two column layout for form + summary */
+    .layout-two-col {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 30px;
+      align-items: start;
+    }
+
+    @media (max-width: 968px) {
+      .layout-two-col {
+        grid-template-columns: 1fr;
+      }
+      .summary-box {
+        position: relative;
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">CompliTrst™</div>
+      <h1>Build Your League Solution</h1>
+      <p class="subtitle">Select the features you need, and we'll create a custom proposal for your league or community</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="steps">
+        <div class="step active" data-step="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Select Modules</div>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Your Details</div>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Module Selection -->
+    <div class="section active" data-section="1">
+      <div class="layout-two-col">
+        <div>
+          <div class="category">
+            <h2>Core Features</h2>
+            <p>Essential modules for league management</p>
+          </div>
+
+          <div class="modules-grid" id="core-modules">
+            <!-- Will be populated by JS -->
+          </div>
+
+          <div class="category">
+            <h2>Advanced Features</h2>
+            <p>Optional add-ons to enhance your system</p>
+          </div>
+
+          <div class="modules-grid" id="advanced-modules">
+            <!-- Will be populated by JS -->
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="nextSection()">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Summary Sidebar -->
+        <div class="summary-box">
+          <div class="summary-title">Your Selection</div>
+          <div id="summary-list">
+            <div class="summary-empty">Select modules to see them here</div>
+          </div>
+          <div class="summary-count" id="summary-count" style="display: none;">
+            <span id="selected-count">0</span> modules selected
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Contact Form -->
+    <div class="section" data-section="2">
+      <div class="layout-two-col">
+        <div>
+          <div class="category">
+            <h2>Tell Us About Your League</h2>
+            <p>Help us customize your proposal</p>
+          </div>
+
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="name">Your Name *</label>
+              <input type="text" id="name" required placeholder="John Smith">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" required placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="(123) 456-7890">
+            </div>
+
+            <div class="form-group">
+              <label for="league-name">League/Organization Name *</label>
+              <input type="text" id="league-name" required placeholder="Sunset Golf League">
+            </div>
+
+            <div class="form-group">
+              <label for="league-type">League Type *</label>
+              <select id="league-type" required>
+                <option value="">Select type...</option>
+                <option value="golf">Golf League</option>
+                <option value="travel">Travel Group</option>
+                <option value="sports">Other Sports League</option>
+                <option value="community">Community Organization</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="members">Number of Members *</label>
+              <input type="number" id="members" required placeholder="e.g., 25">
+            </div>
+
+            <div class="form-group">
+              <label for="frequency">How often do you meet? *</label>
+              <select id="frequency" required>
+                <option value="">Select frequency...</option>
+                <option value="weekly">Weekly</option>
+                <option value="biweekly">Bi-weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="seasonal">Seasonal</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="timeline">When do you want to launch? *</label>
+              <select id="timeline" required>
+                <option value="">Select timeline...</option>
+                <option value="asap">ASAP (1-2 weeks)</option>
+                <option value="month">Within a month</option>
+                <option value="quarter">Within 3 months</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="challenges">What are your biggest challenges right now?</label>
+              <textarea id="challenges" placeholder="Tell us what you're struggling with..."></textarea>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary" onclick="prevSection()">← Back</button>
+              <button type="button" class="btn btn-primary" onclick="nextSection()">Review →</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Summary Sidebar -->
+        <div class="summary-box">
+          <div class="summary-title">Your Selection</div>
+          <div id="summary-list-2">
+            <!-- Populated by JS -->
+          </div>
+          <div class="summary-count">
+            <span id="selected-count-2">0</span> modules selected
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Review -->
+    <div class="section" data-section="3">
+      <div class="category">
+        <h2>Review Your Proposal Request</h2>
+        <p>Please review your selections before submitting</p>
+      </div>
+
+      <div class="review-grid">
+        <div class="review-card">
+          <h3>Contact Information</h3>
+          <p id="review-name"></p>
+          <p id="review-email"></p>
+          <p id="review-phone"></p>
+        </div>
+
+        <div class="review-card">
+          <h3>League Details</h3>
+          <p id="review-league"></p>
+          <p id="review-type"></p>
+          <p id="review-members"></p>
+        </div>
+
+        <div class="review-card">
+          <h3>Timeline & Frequency</h3>
+          <p id="review-frequency"></p>
+          <p id="review-timeline"></p>
+        </div>
+      </div>
+
+      <div class="review-card" style="margin-bottom: 30px;">
+        <h3>Selected Modules (<span id="review-count">0</span>)</h3>
+        <div id="review-modules"></div>
+      </div>
+
+      <div class="review-card" id="review-challenges-section" style="display: none; margin-bottom: 30px;">
+        <h3>Your Challenges</h3>
+        <p id="review-challenges"></p>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+        <button class="btn btn-primary" onclick="submitProposal()">Submit Proposal Request</button>
+      </div>
+    </div>
+
+    <!-- Section 4: Success -->
+    <div class="section" data-section="4">
+      <div class="success-message">
+        <div class="success-icon">✓</div>
+        <h2>Proposal Request Submitted!</h2>
+        <p>Thank you for your interest in League Solutions. We'll review your selections and send you a custom proposal within 24 hours.</p>
+        <p style="margin-top: 20px; font-size: 16px;">
+          <strong>What's Next?</strong><br>
+          Check your email for a confirmation. We'll reach out with your personalized proposal and schedule a demo call.
+        </p>
+        <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 30px; max-width: 300px;">Start Another Request</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Module data
+    const modules = {
+      core: [
+        {
+          id: 'checkin',
+          icon: '✓',
+          title: 'Automated Check-In System',
+          desc: 'Event registration with capacity tracking, auto-cutoffs, and real-time availability'
+        },
+        {
+          id: 'pairing',
+          icon: '⚡',
+          title: 'Smart Pairing/Grouping',
+          desc: 'Algorithm-based player matching with preferences, skill levels, and constraints'
+        },
+        {
+          id: 'financial',
+          icon: '$',
+          title: 'Financial Tracking',
+          desc: 'Payment tracking, expense management, budget oversight, and payout workflows'
+        },
+        {
+          id: 'events',
+          icon: '◆',
+          title: 'Event Management',
+          desc: 'Calendar integration, scheduling, notifications, and multi-event support'
+        },
+        {
+          id: 'members',
+          icon: '●',
+          title: 'Member Directory',
+          desc: 'Profiles, preferences, contact info, and member communication tools'
+        },
+        {
+          id: 'dashboard',
+          icon: '■',
+          title: 'Live Dashboards',
+          desc: 'Real-time standings, leaderboards, statistics, and performance tracking'
+        }
+      ],
+      advanced: [
+        {
+          id: 'documents',
+          icon: '▣',
+          title: 'Document Generation',
+          desc: 'Automated scorecards, reports, PDFs, and professional materials'
+        },
+        {
+          id: 'portal',
+          icon: '◈',
+          title: 'Leadership Portal',
+          desc: 'Admin tools, analytics, approval workflows, and management features'
+        },
+        {
+          id: 'branding',
+          icon: '★',
+          title: 'Custom Branding',
+          desc: 'Your logo, colors, fonts, and branded materials throughout the system'
+        },
+        {
+          id: 'mobile',
+          icon: '▲',
+          title: 'Mobile Optimization',
+          desc: 'Progressive web app, responsive design, and mobile-first experience'
+        },
+        {
+          id: 'payments',
+          icon: '◇',
+          title: 'Payment Integration',
+          desc: 'Zelle, CashApp, Venmo tracking with automated reconciliation'
+        },
+        {
+          id: 'media',
+          icon: '◉',
+          title: 'Photo/Content Sharing',
+          desc: 'Media galleries, player spotlights, and community content features'
+        },
+        {
+          id: 'messaging',
+          icon: '▶',
+          title: 'Messaging System',
+          desc: 'In-app communication, announcements, and member-to-member messaging'
+        }
+      ]
+    };
+
+    let selectedModules = new Set();
+    let currentSection = 1;
+
+    // Initialize
+    function init() {
+      renderModules();
+      updateSummary();
+    }
+
+    // Render module cards
+    function renderModules() {
+      const coreContainer = document.getElementById('core-modules');
+      const advContainer = document.getElementById('advanced-modules');
+
+      coreContainer.innerHTML = modules.core.map(m => createModuleCard(m)).join('');
+      advContainer.innerHTML = modules.advanced.map(m => createModuleCard(m)).join('');
+    }
+
+    function createModuleCard(module) {
+      return `
+        <div class="module-card" onclick="toggleModule('${module.id}')" id="module-${module.id}">
+          <div class="check-icon">✓</div>
+          <div class="module-icon">${module.icon}</div>
+          <div class="module-title">${module.title}</div>
+          <div class="module-desc">${module.desc}</div>
+        </div>
+      `;
+    }
+
+    // Toggle module selection
+    function toggleModule(id) {
+      const card = document.getElementById(`module-${id}`);
+      
+      if (selectedModules.has(id)) {
+        selectedModules.delete(id);
+        card.classList.remove('selected');
+      } else {
+        selectedModules.add(id);
+        card.classList.add('selected');
+      }
+      
+      updateSummary();
+    }
+
+    // Update summary sidebar
+    function updateSummary() {
+      const allModules = [...modules.core, ...modules.advanced];
+      const selected = allModules.filter(m => selectedModules.has(m.id));
+      
+      const summaryList = document.getElementById('summary-list');
+      const summaryList2 = document.getElementById('summary-list-2');
+      const countEls = [
+        document.getElementById('selected-count'),
+        document.getElementById('selected-count-2')
+      ];
+      
+      if (selected.length === 0) {
+        summaryList.innerHTML = '<div class="summary-empty">Select modules to see them here</div>';
+        document.getElementById('summary-count').style.display = 'none';
+      } else {
+        const html = selected.map(m => `
+          <div class="summary-item">
+            <span>${m.icon}</span>
+            <span>${m.title}</span>
+          </div>
+        `).join('');
+        
+        summaryList.innerHTML = html;
+        if (summaryList2) summaryList2.innerHTML = html;
+        document.getElementById('summary-count').style.display = 'block';
+      }
+      
+      countEls.forEach(el => {
+        if (el) el.textContent = selected.length;
+      });
+    }
+
+    // Navigation
+    function nextSection() {
+      // Validate current section
+      if (currentSection === 1 && selectedModules.size === 0) {
+        alert('Please select at least one module to continue.');
+        return;
+      }
+
+      if (currentSection === 2) {
+        const form = document.getElementById('contact-form');
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+        populateReview();
+      }
+
+      currentSection++;
+      showSection(currentSection);
+    }
+
+    function prevSection() {
+      currentSection--;
+      showSection(currentSection);
+    }
+
+    function showSection(num) {
+      // Update sections
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelector(`.section[data-section="${num}"]`).classList.add('active');
+      
+      // Update progress
+      document.querySelectorAll('.step').forEach((step, idx) => {
+        step.classList.remove('active', 'completed');
+        if (idx + 1 < num) step.classList.add('completed');
+        if (idx + 1 === num) step.classList.add('active');
+      });
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Populate review
+    function populateReview() {
+      document.getElementById('review-name').textContent = `Name: ${document.getElementById('name').value}`;
+      document.getElementById('review-email').textContent = `Email: ${document.getElementById('email').value}`;
+      document.getElementById('review-phone').textContent = document.getElementById('phone').value ? 
+        `Phone: ${document.getElementById('phone').value}` : 'Phone: Not provided';
+      
+      document.getElementById('review-league').textContent = document.getElementById('league-name').value;
+      document.getElementById('review-type').textContent = `Type: ${document.getElementById('league-type').value}`;
+      document.getElementById('review-members').textContent = `Members: ${document.getElementById('members').value}`;
+      
+      document.getElementById('review-frequency').textContent = `Frequency: ${document.getElementById('frequency').value}`;
+      document.getElementById('review-timeline').textContent = `Timeline: ${document.getElementById('timeline').value}`;
+      
+      const allModules = [...modules.core, ...modules.advanced];
+      const selected = allModules.filter(m => selectedModules.has(m.id));
+      
+      document.getElementById('review-count').textContent = selected.length;
+      document.getElementById('review-modules').innerHTML = selected.map(m => `
+        <div class="summary-item">${m.icon} ${m.title}</div>
+      `).join('');
+      
+      const challenges = document.getElementById('challenges').value;
+      if (challenges) {
+        document.getElementById('review-challenges-section').style.display = 'block';
+        document.getElementById('review-challenges').textContent = challenges;
+      }
+    }
+
+    // Submit to Google Form
+    async function submitProposal() {
+      // Collect all data
+      const allModules = [...modules.core, ...modules.advanced];
+      const selected = allModules.filter(m => selectedModules.has(m.id));
+      const selectedTitles = selected.map(m => m.title).join(', ');
+      
+      const data = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value || 'Not provided',
+        leagueName: document.getElementById('league-name').value,
+        leagueType: document.getElementById('league-type').value,
+        members: document.getElementById('members').value,
+        frequency: document.getElementById('frequency').value,
+        timeline: document.getElementById('timeline').value,
+        challenges: document.getElementById('challenges').value || 'None specified',
+        modules: selectedTitles,
+        moduleCount: selected.length,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Create form data for Google Form submission
+      const formData = new FormData();
+      formData.append('entry.1252463173', data.name);
+      formData.append('entry.1545932480', data.email);
+      formData.append('entry.301494746', data.phone);
+      formData.append('entry.2089858662', data.leagueName);
+      formData.append('entry.2006223581', data.leagueType);
+      formData.append('entry.831065050', data.members);
+      formData.append('entry.1390382125', data.frequency);
+      formData.append('entry.2126791411', data.timeline);
+      formData.append('entry.197993619', data.challenges);
+      formData.append('entry.626200282', data.modules);
+      formData.append('entry.1288923532', data.moduleCount);
+      formData.append('entry.1534543871', data.timestamp);
+      
+      // Submit to Google Form
+      try {
+        await fetch('https://docs.google.com/forms/d/e/1FAIpQLSfDooaB453vxFL-WaFdHGryBLpscylxZrUQv9GHF0UxlGBjEA/formResponse', {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors'
+        });
+        
+        // Show success
+        currentSection = 4;
+        showSection(4);
+      } catch (error) {
+        console.error('Submission error:', error);
+        // Still show success since no-cors mode doesn't report errors
+        currentSection = 4;
+        showSection(4);
+      }
+    }
+
+    // Initialize on load
+    init();
+  </script>
+</body>
+</html>
