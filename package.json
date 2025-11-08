@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "League Solutions Configurator with Google Sheets Integration via SheetDB",
   "type": "module",
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  },
   "engines": {
     "node": ">=18"
   }
