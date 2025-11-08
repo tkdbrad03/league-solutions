@@ -1,0 +1,9 @@
+{
+  "name": "league-solutions",
+  "version": "1.0.0",
+  "description": "League Solutions Configurator with Google Sheets Integration via SheetDB",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -6,12 +6,12 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+
   // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
-  
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -19,61 +19,58 @@ export default async function handler(req, res) {
 
   try {
     const data = req.body;
-    
-    // Google Sheets configuration
-    const SHEET_ID = '1zyeS0MbRHTphEZTuUqGnqT5w83_CG0X2zvNragNNt6Q';
-    const API_KEY = 'AIzaSyBUHIjgU0E4-Vp9gew4QWi5J3_CH2nTrUE';
-    const RANGE = 'Sheet1!A:M';
-    
-    // Prepare row data
-    const rowData = [
-      data.timestamp || new Date().toLocaleString(),
-      data.name || '',
-      data.email || '',
-      data.phone || '',
-      data.leagueName || '',
-      data.leagueType || '',
-      data.members || '',
-      data.frequency || '',
-      data.timeline || '',
-      data.challenges || '',
-      data.moduleCount || '0',
-      data.modules || ''
-    ];
-    
-    // Call Google Sheets API
-    const sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}:append?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-    
-    const sheetsResponse = await fetch(sheetsUrl, {
+
+    // SheetDB API configuration
+    const SHEETDB_API_URL = process.env.SHEETDB_API_URL || 'https://sheetdb.io/api/v1/ax3gbf2cfplov';
+
+    // Prepare row data for SheetDB
+    const rowData = {
+      timestamp: data.timestamp || new Date().toLocaleString(),
+      name: data.name || '',
+      email: data.email || '',
+      phone: data.phone || '',
+      leagueName: data.leagueName || '',
+      leagueType: data.leagueType || '',
+      members: data.members || '',
+      frequency: data.frequency || '',
+      timeline: data.timeline || '',
+      challenges: data.challenges || '',
+      moduleCount: data.moduleCount || '0',
+      modules: data.modules || ''
+    };
+
+    // Send data to SheetDB
+    const sheetDBResponse = await fetch(SHEETDB_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        values: [rowData]
-      })
+      body: JSON.stringify({ data: rowData })
     });
-    
-    const responseText = await sheetsResponse.text();
-    
-    if (!sheetsResponse.ok) {
-      console.error('Sheets API Error:', sheetsResponse.status, responseText);
-      return res.status(500).json({ 
+
+    if (!sheetDBResponse.ok) {
+      const errorText = await sheetDBResponse.text();
+      console.error('SheetDB API Error:', sheetDBResponse.status, errorText);
+      return res.status(500).json({
         success: false,
-        error: 'Failed to write to Google Sheets',
-        details: responseText
+        error: 'Failed to write to Google Sheets via SheetDB',
+        details: errorText
       });
     }
-    
+
+    const result = await sheetDBResponse.json();
+    console.log('Successfully appended data to Google Sheets via SheetDB:', result);
+
     // Success
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: true,
-      message: 'Proposal submitted successfully' 
+      message: 'Proposal submitted successfully',
+      sheetDBResponse: result
     });
-    
+
   } catch (error) {
     console.error('Submission error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       success: false,
       error: 'Failed to submit proposal',
       details: error.message
