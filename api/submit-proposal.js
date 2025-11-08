@@ -20,6 +20,8 @@ export default async function handler(req, res) {
   try {
     const data = req.body;
     
+    console.log('Received submission:', data);
+    
     // Google Sheets configuration
     const SHEET_ID = '1zyeS0MbRHTphEZTuUqGnqT5w83_CG0X2zvNragNNt6Q';
     const API_KEY = 'AIzaSyBUHIjgU0E4-Vp9gew4QWi5J3_CH2nTrUE';
@@ -41,8 +43,12 @@ export default async function handler(req, res) {
       data.modules || ''
     ];
     
+    console.log('Row data to append:', rowData);
+    
     // Call Google Sheets API
     const sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}:append?valueInputOption=USER_ENTERED&key=${API_KEY}`;
+    
+    console.log('Calling Sheets API...');
     
     const sheetsResponse = await fetch(sheetsUrl, {
       method: 'POST',
@@ -55,53 +61,20 @@ export default async function handler(req, res) {
     });
     
     const responseText = await sheetsResponse.text();
+    console.log('Sheets API response:', sheetsResponse.status, responseText);
     
     if (!sheetsResponse.ok) {
       console.error('Sheets API Error:', sheetsResponse.status, responseText);
       return res.status(500).json({ 
         success: false,
         error: 'Failed to write to Google Sheets',
-        details: responseText
+        details: responseText,
+        status: sheetsResponse.status
       });
     }
     
-    // Send email notification using Resend (free tier: 3,000 emails/month)
-    // You'll need to add RESEND_API_KEY to Vercel environment variables
-    if (process.env.RESEND_API_KEY) {
-      try {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            from: 'League Solutions <onboarding@resend.dev>',
-            to: 'info@complitrst.com',
-            subject: `New Proposal Request: ${data.leagueName}`,
-            html: `
-              <h2>New League Solutions Proposal Request</h2>
-              <p><strong>Name:</strong> ${data.name}</p>
-              <p><strong>Email:</strong> ${data.email}</p>
-              <p><strong>Phone:</strong> ${data.phone}</p>
-              <p><strong>League:</strong> ${data.leagueName}</p>
-              <p><strong>Type:</strong> ${data.leagueType}</p>
-              <p><strong>Members:</strong> ${data.members}</p>
-              <p><strong>Frequency:</strong> ${data.frequency}</p>
-              <p><strong>Timeline:</strong> ${data.timeline}</p>
-              <p><strong>Challenges:</strong> ${data.challenges}</p>
-              <p><strong>Selected Modules (${data.moduleCount}):</strong> ${data.modules}</p>
-              <p><a href="https://docs.google.com/spreadsheets/d/1zyeS0MbRHTphEZTuUqGnqT5w83_CG0X2zvNragNNt6Q/edit">View in Sheet</a></p>
-            `
-          })
-        });
-      } catch (emailError) {
-        console.error('Email notification failed:', emailError);
-        // Don't fail the request if email fails
-      }
-    }
-    
     // Success
+    console.log('Successfully wrote to Sheet');
     return res.status(200).json({ 
       success: true,
       message: 'Proposal submitted successfully' 
@@ -112,7 +85,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ 
       success: false,
       error: 'Failed to submit proposal',
-      details: error.message
+      details: error.message,
+      stack: error.stack
     });
   }
 }
