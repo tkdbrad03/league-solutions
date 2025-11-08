@@ -2,6 +2,16 @@
 // This file goes in /api/submit-proposal.js in your GitHub repo
 
 export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -17,38 +27,42 @@ export default async function handler(req, res) {
     
     // Prepare row data
     const rowData = [
-      data.timestamp,
-      data.name,
-      data.email,
-      data.phone,
-      data.leagueName,
-      data.leagueType,
-      data.members,
-      data.frequency,
-      data.timeline,
-      data.challenges,
-      data.moduleCount,
-      data.modules
+      data.timestamp || new Date().toLocaleString(),
+      data.name || '',
+      data.email || '',
+      data.phone || '',
+      data.leagueName || '',
+      data.leagueType || '',
+      data.members || '',
+      data.frequency || '',
+      data.timeline || '',
+      data.challenges || '',
+      data.moduleCount || '0',
+      data.modules || ''
     ];
     
     // Call Google Sheets API
-    const sheetsResponse = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}:append?valueInputOption=USER_ENTERED&key=${API_KEY}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          values: [rowData]
-        })
-      }
-    );
+    const sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}:append?valueInputOption=USER_ENTERED&key=${API_KEY}`;
+    
+    const sheetsResponse = await fetch(sheetsUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        values: [rowData]
+      })
+    });
+    
+    const responseText = await sheetsResponse.text();
     
     if (!sheetsResponse.ok) {
-      const errorData = await sheetsResponse.json();
-      console.error('Sheets API Error:', errorData);
-      throw new Error('Failed to write to Google Sheets');
+      console.error('Sheets API Error:', sheetsResponse.status, responseText);
+      return res.status(500).json({ 
+        success: false,
+        error: 'Failed to write to Google Sheets',
+        details: responseText
+      });
     }
     
     // Success
