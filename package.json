@@ -1,0 +1,12 @@
+{
+  "name": "league-solutions",
+  "version": "1.0.0",
+  "description": "League Solutions Configurator with Google Sheets Integration",
+  "type": "module",
+  "dependencies": {
+    "googleapis": "^128.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
